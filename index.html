@@ -793,54 +793,53 @@ Data Visualization & Storytelling (Streamlit, Tableau, matplotlib) — 80% -->
       <!--
         - #PORTFOLIO
       -->
+<article class="portfolio" data-page="portfolio">
+  <header>
+    <h2 class="h2 article-title">Projects</h2>
+  </header>
 
-  <article class="portfolio" data-page="portfolio">
-    <header>
-      <h2 class="h2 article-title">Projects</h2>
-    </header>
+  <section class="projects">
+    <ul class="project-list" id="github-projects">
+      <!-- GitHub Projects will be injected here -->
+    </ul>
+  </section>
+</article>
 
-    <section class="projects">
-      <ul class="project-list" id="github-projects">
-        <!-- GitHub Projects will be injected here -->
-      </ul>
-    </section>
-  </article>
+<script>
+  const githubUsername = "Rahulbolloju16";
+  const selectedRepos = ["llama", "causalml"]; // Add repo names you want to show
+  const projectList = document.getElementById("github-projects");
 
-  <script>
-    const githubUsername = "Rahulbolloju16";
-    const selectedRepos = ["llama", "causalml"]; // Add repo names you want to show
-    const projectList = document.getElementById("github-projects");
+  fetch(`https://api.github.com/users/${githubUsername}/repos`)
+    .then(response => response.json())
+    .then(repos => {
+      repos
+        .filter(repo => selectedRepos.includes(repo.name))
+        .forEach(repo => {
+          const li = document.createElement("li");
+          li.classList.add("project-item", "active");
 
-    fetch(`https://api.github.com/users/${Rahulbolloju16}/repos`)
-      .then(response => response.json())
-      .then(repos => {
-        repos
-          .filter(repo => selectedRepos.includes(repo.name))
-          .forEach(repo => {
-            const li = document.createElement("li");
-            li.classList.add("project-item", "active");
-
-            li.innerHTML = `
-              <a href="${repo.html_url}" target="_blank">
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-                  <img src="https://opengraph.githubassets.com/1/${Rahulbolloju16}/${repo.name}" 
-                       alt="${repo.name}" loading="lazy">
-                </figure>
-                <h3 class="project-title">${repo.name}</h3>
-                <p class="project-category">${repo.language || "Repository"}</p>
-              </a>
-            `;
-            projectList.appendChild(li);
-          });
-      })
-      .catch(error => {
-        console.error("Error fetching GitHub repos:", error);
-        projectList.innerHTML = "<p>Unable to load projects at this time.</p>";
-      });
-  </script>
+          li.innerHTML = `
+            <a href="${repo.html_url}" target="_blank">
+              <figure class="project-img">
+                <div class="project-item-icon-box">
+                  <ion-icon name="eye-outline"></ion-icon>
+                </div>
+                <img src="https://opengraph.githubassets.com/1/${githubUsername}/${repo.name}" 
+                     alt="${repo.name}" loading="lazy" onerror="this.src='default-image.png';">
+              </figure>
+              <h3 class="project-title">${repo.name}</h3>
+              <p class="project-category">${repo.language || "Repository"}</p>
+            </a>
+          `;
+          projectList.appendChild(li);
+        });
+    })
+    .catch(error => {
+      console.error("Error fetching GitHub repos:", error);
+      projectList.innerHTML = "<p>Unable to load projects at this time.</p>";
+    });
+</script>
 
 
 
